@@ -138,7 +138,9 @@ namespace :heroku do
       puts command
       config = Hash[`#{command}`.scan(/^(.+?)\s*=>\s*(.+)$/)]
       if config['RACK_ENV'] != name
-        sh "heroku config:add --app #{app} RACK_ENV=#{name}"
+        %w{ RAILS_ENV RACK_ENV }.each do |var|
+          sh "heroku config:add --app #{app} #{var}=#{name}"
+        end
       end
     end
   end
