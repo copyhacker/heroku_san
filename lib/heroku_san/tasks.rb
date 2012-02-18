@@ -305,7 +305,7 @@ desc 'Turn on maintenance mode, deploy the app, precompile the assets and turn o
 task :maintenance_deploy, :task do |t, args|
   each_heroku_app do |name, app, repo|
     maintenance(app, 'on')
-    Rake::Task[:deploy]
+    Rake::Task[:deploy].execute
     Rake::Task[:'heroku:rake'].execute(args) if args[:task]
     maintenance(app, 'off')
   end
