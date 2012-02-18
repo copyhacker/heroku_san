@@ -301,6 +301,16 @@ task :logs do
   end
 end
 
+desc 'Turn on maintenance mode, deploy the app, precompile the assets and turn off maintenance mode'
+task :maintenance_deploy, :task do |t, args|
+  each_heroku_app do |name, app, repo|
+    maintenance(app, 'on')
+    deploy(app)
+    Rake::Task[:'heroku:rake'].execute(args) if args[:task]
+    maintenance(app, 'off')
+  end
+end
+
 namespace :db do
   desc 'Pull the Heroku database'
   task :pull do
